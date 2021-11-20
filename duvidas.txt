@@ -1,0 +1,4 @@
+O cliente pode processar e formatar os dados? liberado
+O que deve ser impresso na tela? tudo?
+O terminal sera como uma tela interativa? automático
+
