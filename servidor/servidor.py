@@ -1,9 +1,10 @@
 """
 Disciplina de Redes de Computadores
 Semestre: 2021/2
-Trabalho = "Aprendendo redes"
+Trabalho = "Protocolo loja de produtos esportivos"
 
 Autor   = "Matheus de Souza"
+Matricula = 20191BSI0301
 E-mail  = "matheussouzapoliveira@gmail.com"
 """
 
@@ -37,6 +38,7 @@ while True:
   print('Cliente', clienteConsumidorFornecedor, '\n') # Imprime Resposta - CONSUMIDOR || FORNECEDOR
 
   estoque = leEstoque() # Retorna um objeto com os itens e a quantidade em estoque
+  imprimeEstoque(estoque)
   objSend = codificar(estoque) # Codifica o estoque
   con.send(objSend) # Envia o objeto codificado
 
@@ -64,9 +66,10 @@ while True:
       realizaCompra(solicitacaoCliente, estoque)
       print('Compra da loja!')
       con.send(codificar({ 'message': 'A compra foi aceita pela loja! :D' }))
-      imprimeEstoque(estoque)
     else:
       print('Pedido rejeitado')
       con.send(codificar({ 'message': 'Pedido rejeitado! :(' }))
+    
+    imprimeEstoque(estoque)
   con.close()
   

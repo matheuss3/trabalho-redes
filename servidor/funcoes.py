@@ -1,5 +1,12 @@
-import os
+"""
+Disciplina de Redes de Computadores
+Semestre: 2021/2
+Trabalho = "Protocolo loja de produtos esportivos"
 
+Autor   = "Matheus de Souza"
+Matricula = 20191BSI0301
+E-mail  = "matheussouzapoliveira@gmail.com"
+"""
 def leEstoque():
   estoque = []
 
