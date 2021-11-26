@@ -7,18 +7,9 @@ def imprimeEstoque(estoque):
     print('---------------------')
   print()
 
-def imprimeSolicitacaoCompra(pedido):
-  print('#PEDIDO FEITO A LOJA#')
-
-  for item in pedido:
-    print('Item: ' + item['item'])
-    print('Quantidade solicitada: ' + str(item['qtdPedida']))
-    print('---------------------')
-  print()
-
 import random
 
-def criaPedidoConsumidor(estoque):
+def criaPedidoVenda(estoque):
   itensPedido = []
 
   for i in range(5):
@@ -27,12 +18,16 @@ def criaPedidoConsumidor(estoque):
     itemExists = False
     for itemPedido in itensPedido:
       if itemPedido['item'] == itemSelected['item']:
-        itemPedido['qtdPedida'] += 1
+        itemPedido['qtdForn'] += 1
         itemExists = True
         break
     
     if not itemExists:
-      itemPedido = { 'item': itemSelected['item'], 'qtdPedida': 1 }
+      itemPedido = { 
+        'item': itemSelected['item'], 
+        'qtdForn': 1,
+        'vlUnitario': itemSelected['vlUnitario'] * 0.5
+      }
       itensPedido.append(itemPedido)
     
   return itensPedido

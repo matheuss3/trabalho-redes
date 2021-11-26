@@ -23,6 +23,14 @@ def leEstoque():
   
   return estoque
 
+def imprimeEstoque(estoque):
+  print('\n#ESTOQUE#')
+  for dictItem in estoque:
+    print(f'Item: ' + dictItem['item'])
+    print(f'Quantidade em estoque: ' + str(dictItem['qtdEstoque']))
+    print(f'Valor unitário: ' + str(dictItem['vlUnitario']))
+    print('---------------------')
+  print()
 
 def imprimeSolicitacaoClienteConsumidor(pedido):
   print('#PEDIDO DO CLIENTE CONSUMIDOR#')
@@ -30,7 +38,19 @@ def imprimeSolicitacaoClienteConsumidor(pedido):
   for item in pedido:
     print('Item: ' + item['item'])
     print('Quantidade solicitada: ' + str(item['qtdPedida']))
-    print()
+    print('---------------------')
+  print()
+
+def imprimeSolicitacaoClienteFornecedor(pedido):
+  print('#PEDIDO DO CLIENTE FORNECEDOR#')
+
+  for item in pedido:
+    print('Item: ' + item['item'])
+    print('Quantidade fornecida: ' + str(item['qtdForn']))
+    print('Valor unitario: ' + str(item['vlUnitario']))
+    print('---------------------')
+  print()
+
 
 import random
 
@@ -40,16 +60,45 @@ def procuraItemEstoque(item, estoque):
       return itemEstoque
 
 
-def atendeSolicitacaoConsumidor(pedido, estoque):
-  for itemPedido in pedido:
-    itemEstoque = procuraItemEstoque(itemPedido['item'], estoque)
-    itemEstoque['qtdEstoque'] -= itemPedido['qtdPedida']
+def atendeSolicitacaoConsumidor(solicitacao, estoque):
+  pedido = { 'numero_pedido': random.randint(1, 1000000), 'vlTotal': 0, 'itens': [] }
+
+  for itemSolicitado in solicitacao:
+    itemEstoque = procuraItemEstoque(itemSolicitado['item'], estoque)
+    itemEstoque['qtdEstoque'] -= itemSolicitado['qtdPedida']
 
     if itemEstoque['qtdEstoque'] < 0:
       return None
-  
-  return { 'pedido': random.randint(1, 1000000), 'itens': pedido }
+    
+    pedido['itens'].append({
+      'item': itemSolicitado['item'],
+      'quantidade': itemSolicitado['qtdPedida'],
+      'valorUnitario': itemEstoque['vlUnitario']
+    })
 
+    pedido['vlTotal'] += itemEstoque['vlUnitario'] * itemSolicitado['qtdPedida']
+
+  atualizaEstoque(estoque)
+  return pedido
+
+def realizaCompra(solicitacao, estoque):
+  for itemSolicitado in solicitacao:
+    itemEstoque = procuraItemEstoque(itemSolicitado['item'], estoque)
+    itemEstoque['qtdEstoque'] += itemSolicitado['qtdForn']
+
+  atualizaEstoque(estoque)
+
+def atualizaEstoque(estoque):
+  fileEstoque = open('database/estoque.csv', 'w')
+
+  fileEstoque.write('item;estoque;vl_unitario\n')
+
+  for itemEstoque in estoque:
+    item = itemEstoque['item']
+    qtdEstoque = itemEstoque['qtdEstoque']
+    vlUnitario = itemEstoque['vlUnitario']
+
+    fileEstoque.write(f'{item};{qtdEstoque};{vlUnitario}\n')
 
 import json
 
